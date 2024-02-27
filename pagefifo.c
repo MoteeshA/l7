@@ -1,46 +1,48 @@
 #include <stdio.h>
 
-int pages[50], frame[10];
+int page[50], frame[10];
 
 int main() {
-    int n, i, j = 0, k, fn, count = 0, maincounter = 0, pageFaults = 0;
+    int n, fn;
 
     printf("Enter the number of pages: ");
     scanf("%d", &n);
 
-    printf("Enter the reference string\n");
-    for (i = 0; i < n; i++) {
-        scanf("%d", &pages[i]);
-    }
+    printf("\nEnter replacement string: ");
+    for (int i = 0; i < n; i++)
+        scanf("%d", &page[i]);
 
-    printf("Enter the number of frames: ");
+    printf("\nEnter the number of frames: ");
     scanf("%d", &fn);
 
-    for (i = 0; i < fn; i++)
-        frame[i] = -1;
+    printf("\nPAGE STRING | FRAMES\t\t| PAGE FAULTS\n");
+    printf("----------------------------------------\n");
 
-    printf("\nReference String\tPage Frames\tPage Faults\n");
-    for (i = 0; i < n; i++) {
-        printf("%d\t\t", pages[i]);
-        count = 0;
-        for (k = 0; k < fn; k++) {
-            if (frame[k] == pages[i]) {
-                count = 0; // If the page is already in the frame, set count to 0
-                break;     // Exit the loop
+    int pagefault = 0;
+    int inFrame;
+
+    for (int i = 0; i < n; i++) {
+        inFrame = 0;
+        printf("%d\t\t| ", page[i]);
+
+        for (int j = 0; j < fn; j++) {
+            printf("%d ", frame[j]);
+            if (frame[j] == page[i]) {
+                inFrame = 1;
+                break;
             }
         }
-        if (count == fn) {
-            frame[j] = pages[i];
-            j = (j + 1) % fn;
-            pageFaults++;
+
+        if (!inFrame) {
+            int j = 0;
+            frame[j] = page[i];
+            pagefault++;
         }
-        for (k = 0; k < fn; k++) {
-            printf("%d\t", frame[k]);
-        }
-        printf("\t\t%d\n", pageFaults);
+
+        printf("\t\t| %d\n", pagefault);
     }
 
-    printf("Total Page Faults: %d\n", pageFaults);
+    printf("\nTotal Page Faults: %d\n", pagefault);
 
     return 0;
 }
